@@ -475,6 +475,10 @@ doCosmoCompilation()
 		extraFlags="${extraFlags} -x ${dycorepath}"
 	fi	
 
+	if [ ${doRepro} == "OFF" ] ; then
+		extraFlags="${extraFlags} -q"
+	fi 
+
 	test/jenkins/build.sh "${moreFlag}" "${extraFlags}"
 	retCode=$?
 	tryExit $retCode "COSMO BUILD"
