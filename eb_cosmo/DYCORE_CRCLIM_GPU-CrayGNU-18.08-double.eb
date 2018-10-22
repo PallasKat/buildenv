@@ -1,0 +1,30 @@
+easyblock = 'CMakeMake'
+
+name = 'DYCORE_CRCLIM_GPU'
+version = 'crclim'
+versionsuffix = '-double'
+
+homepage = 'https://github.com/C2SM-RCM/cosmo-pompa/tree/master/dycore (-b crclim)'
+description = """COSMO Pompa Dynamical core for GPU (CRCLIM)"""
+
+toolchain = {'name': 'CrayGNU', 'version': '18.08'}
+toolchainopts = {'verbose': False}
+
+sources = [ {'filename': 'dycore.tar.gz'}, ]
+
+builddependencies = [ ('CMake', '3.12.0', '', True), ]
+
+dependencies = [
+    ('STELLA_CRCLIM', '%(version)s', '%(versionsuffix)s'),
+]
+
+srcdir = "../dycore"
+configopts  = "-DCMAKE_BUILD_TYPE=Release "
+configopts += "-DSINGLEPRECISION=OFF "
+configopts += "-DCUDA_BACKEND=ON "
+configopts += "-DSTELLA_DIR=${EBROOTSTELLA_CRCLIM} " 
+configopts += "-DBITREPRO=OFF "
+
+separate_build_dir = True
+
+moduleclass = 'devel'
