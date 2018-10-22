@@ -62,8 +62,14 @@ sedIt()
     dc=$2
     pu=$3
     op=$4
+    template="env/template.${pu,,}"
+    if [ ! -f ${template} ]
+    then
+        pErr "File ${template} not found "
+        exit 1
+    fi
 
-    sed -i "s@%STELLADIR%@\"${st}\"@g" "env/template.cpu" > "${op}"
+    sed -i "s@%STELLADIR%@\"${st}\"@g" "${template}" > "${op}"
     contOrExit "SED STELLA" $?
     sed -i "s@%DYCOREDIR%@\"${dc}_${pu}\"@g" "${op}" > "${op}"
     contOrExit "SED DYCORE" $?
@@ -317,11 +323,24 @@ else
     exit 1
 fi
 
-cat <<EOT >> export_load.txt
+if [ "${CPU}" == "ON" ]
+then
+cat <<EOT >> export_load_cpu.txt
 export EASYBUILD_PREFIX=${INSTPATH}
 export EASYBUILD_BUILDPATH=/tmp/${USER}/easybuild
 module load daint-gpu
 module load EasyBuild-custom
 EOT
+fi
+
+if [ "${GPU}" == "ON" ]
+then
+cat <<EOT >> export_load_gpu.txt
+export EASYBUILD_PREFIX=${INSTPATH}
+export EASYBUILD_BUILDPATH=/tmp/${USER}/easybuild
+module load daint-gpu
+module load EasyBuild-custom
+EOT
+fi
 
 exit 0
