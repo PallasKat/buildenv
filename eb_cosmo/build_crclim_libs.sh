@@ -251,24 +251,30 @@ if [ "${CRCLIM}" == "ON" ]
 then
     pInfo "Compiling and installing crCLIM Stella"
     eb STELLA_CRCLIM-CrayGNU-18.08-double.eb -r
+    contOrExit "STELLA EB" $?
     if [ "${CPU}" == "ON" ]
     then
         pInfo "Compiling and installing crCLIM CPU Dycore"
         eb DYCORE_CRCLIM_CPU-CrayGNU-18.08-double.eb -r
+        contOrExit "DYCORE EB" $?
     else
         pInfo "Compiling and installing crCLIM GPU Dycore"
         eb DYCORE_CRCLIM_GPU-CrayGNU-18.08-double.eb -r
+        contOrExit "DYCORE EB" $?
     fi
 else
     pInfo "Compiling and installing Cordex Stella"
     eb STELLA_CORDEX-CrayGNU-18.08-double.eb -r
+    contOrExit "STELLA EB" $?
     if [ "${CPU}" == "ON" ]
     then
         pInfo "Compiling and installing Cordex CPU Dycore"
         eb DYCORE_CORDEX_CPU-CrayGNU-18.08-double.eb -r
+        contOrExit "DYCORE EB" $?
     else
         pInfo "Compiling and installing Cordex GPU Dycore"
         eb DYCORE_CORDEX_GPU-CrayGNU-18.08-double.eb -r
+        contOrExit "DYCORE EB" $?
     fi
 fi
 
