@@ -289,6 +289,7 @@ then
     sed -i "s@%STELLADIR%@\"${stellaOpt}_${cpuVar}\"@g" "env/template.cpu" > "${optCPU}"
     sed -i "s@%DYCOREDIR%@\"${dycoreOpt}\"@g" "${optCPU}"
 elif [ "${CPU}" == "OFF" ] && [ "${GPU}" == "ON" ]
+then
     sed -i "s@%STELLADIR%@\"${stellaOpt}_${gpuVar}\"@g" "env/template.gpu" > "${optGPU}"
     sed -i "s@%DYCOREDIR%@\"${dycoreOpt}\"@g" "${optGPU}"
 else    
