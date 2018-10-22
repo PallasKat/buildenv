@@ -32,17 +32,6 @@ pErr()
 	echo -e "${RED}[ERROR]${NC} ${msg}"
 }
 
-exitError()
-{
-    RED='\033[0;31m'
-    NC='\033[0m'
-	echo -e "${RED}EXIT WITH ERROR${NC}"
-	echo "ERROR $1: $3" 1>&2
-	echo "ERROR     LOCATION=$0" 1>&2
-	echo "ERROR     LINE=$2" 1>&2
-	exit "$1"
-}
-
 errConfig()
 {
     pErr "Unable to find valid configuration:"
@@ -52,6 +41,32 @@ errConfig()
     pErr "Project"
     pErr "   crCRLIM       : ${CRCLIM}"
     pErr "   Cordex        : ${CORDEX}"  
+}
+
+contOrExit()
+{
+    info=$1
+    status=$2
+    if [ "${status}" -eq 0 ]
+    then
+        pOk "Success ${info}"
+    else
+        pErr "Failure ${info}"
+        exit 1
+    fi
+}
+
+sedIt()
+{
+    st=$1
+    dc=$2
+    pu=$3
+    op=$4
+
+    sed -i "s@%STELLADIR%@\"${st}\"@g" "env/template.cpu" > "${op}"
+    contOrExit "SED STELLA" $?
+    sed -i "s@%DYCOREDIR%@\"${dc}_${pu}\"@g" "${op}" > "${op}"
+    contOrExit "SED DYCORE" $?
 }
 
 showUsage()
@@ -279,6 +294,7 @@ then
     dycoreOpt="${dycoreVar}_${cordexVar}"
 else    
     errConfig 
+    exit 1
 fi
 
 pInfo "Stella env var: ${stellaOpt}"
@@ -286,14 +302,13 @@ pInfo "Dycore env var: ${dycoreOpt}"
 
 if [ "${CPU}" == "ON" ] && [ "${GPU}" == "OFF" ]
 then
-    sed -i "s@%STELLADIR%@\"${stellaOpt}_${cpuVar}\"@g" "env/template.cpu" > "${optCPU}"
-    sed -i "s@%DYCOREDIR%@\"${dycoreOpt}\"@g" "${optCPU}"
+    sedIt ${stellaOpt} ${dycoreOpt} ${cpuVar} ${optCPU}
 elif [ "${CPU}" == "OFF" ] && [ "${GPU}" == "ON" ]
 then
-    sed -i "s@%STELLADIR%@\"${stellaOpt}_${gpuVar}\"@g" "env/template.gpu" > "${optGPU}"
-    sed -i "s@%DYCOREDIR%@\"${dycoreOpt}\"@g" "${optGPU}"
-else    
+    sedIt ${stellaOpt} ${dycoreOpt} ${gpuVar} ${optGPU}
+else
     errConfig  
+    exit 1
 fi
 
 cat <<EOT >> export_load.txt
@@ -302,3 +317,5 @@ export EASYBUILD_BUILDPATH=/tmp/${USER}/easybuild
 module load daint-gpu
 module load EasyBuild-custom
 EOT
+
+exit 0
