@@ -71,7 +71,7 @@ sedIt()
 
     sed -i "s@%STELLADIR%@\"${st}\"@g" "${template}" > "${op}"
     contOrExit "SED STELLA" $?
-    sed -i "s@%DYCOREDIR%@\"${dc}_${pu}\"@g" "${op}" > "${op}"
+    sed -i "s@%DYCOREDIR%@\"${dc}_${pu}\"@g" "${op}" >> "${op}"
     contOrExit "SED DYCORE" $?
 }
 
@@ -325,7 +325,7 @@ fi
 
 if [ "${CPU}" == "ON" ]
 then
-cat <<EOT >> export_load_cpu.txt
+cat <<EOT >> ${INSTPATH}/export_load_cpu.txt
 export EASYBUILD_PREFIX=${INSTPATH}
 export EASYBUILD_BUILDPATH=/tmp/${USER}/easybuild
 module load daint-gpu
@@ -335,7 +335,7 @@ fi
 
 if [ "${GPU}" == "ON" ]
 then
-cat <<EOT >> export_load_gpu.txt
+cat <<EOT >> ${INSTPATH}/export_load_gpu.txt
 export EASYBUILD_PREFIX=${INSTPATH}
 export EASYBUILD_BUILDPATH=/tmp/${USER}/easybuild
 module load daint-gpu
