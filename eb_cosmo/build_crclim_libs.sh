@@ -56,24 +56,7 @@ contOrExit()
     fi
 }
 
-sedIt()
-{
-    st=$1
-    dc=$2
-    pu=$3
-    op=$4
-    template="env/template.${pu,,}"
-    if [ ! -f ${template} ]
-    then
-        pErr "File ${template} not found "
-        exit 1
-    fi
 
-    sed -i "s@%STELLADIR%@\"${st}\"@g" "${template}" > "${op}"
-    contOrExit "SED STELLA" $?
-    sed -i "s@%DYCOREDIR%@\"${dc}_${pu}\"@g" "${op}" >> "${op}"
-    contOrExit "SED DYCORE" $?
-}
 
 showUsage()
 {
@@ -90,7 +73,7 @@ showUsage()
 showConfig()
 {
     echo "==========================================================="
-    echo "Compiling STELLA and the C++ DyCore as modules"
+    echo "Compiling STELLA and the C++ Dycore as modules"
     echo "==========================================================="
     echo "Date             : $(date)"
     echo "Machine          : ${HOSTNAME}"
@@ -284,44 +267,45 @@ else
     fi
 fi
 
+sedIt()
+{
+    proj=$1
+    targ=$2    
+
+    template="env/template.${targ,,}"
+    if [ ! -f ${template} ]
+    then
+        pErr "File ${template} not found "
+        exit 1
+    fi
+
+    stellaOpt="EBROOTSTELLA_${proj^^}"
+    dycoreOpt="EBROOTDYCORE_${proj^^}_${targ^^}"
+    optFile="Option.lib.${targ,,}"
+
+    sed -i "s@%STELLADIR%@\"${stellaOpt}\"@g" "${template}" > "${optFile}"
+    contOrExit "SED STELLA" $?
+    sed -i "s@%DYCOREDIR%@\"${dycoreOpt}\"@g" "${op}" >> "${optFile}"
+    contOrExit "SED DYCORE" $?
+}
+
 # This can be more elegant, but let's pay our technical 
 # debt later, at least it's straightforward to read
-optCPU="Option.lib.cpu"
-optGPU="Option.lib.gpu"
-
-stellaVar="EBROOTSTELLA"
-dycoreVar="EBROOTDYCORE"
-cpuVar="CPU"
-gpuVar="GPU"
-crclimVar="CRCLIM"
-cordexVar="CORDEX"
-
-if [ "${CRCLIM}" == "ON" ] && [ "${CORDEX}" == "OFF" ]
+if [ "${CRCLIM}" == "ON" ]
 then
-    stellaOpt="${stellaVar}_${crclimVar}"
-    dycoreOpt="${dycoreVar}_${crclimVar}"
-elif [ "${CRCLIM}" == "OFF" ] && [ "${CORDEX}" == "ON" ]
-then
-    stellaOpt="${stellaVar}_${cordexVar}"
-    dycoreOpt="${dycoreVar}_${cordexVar}"
-else    
-    errConfig 
-    exit 1
-fi
-
-pInfo "Stella env var: ${stellaOpt}"
-pInfo "Dycore env var: ${dycoreOpt}"
-
-if [ "${CPU}" == "ON" ] && [ "${GPU}" == "OFF" ]
-then
-    sedIt ${stellaOpt} ${dycoreOpt} ${cpuVar} ${optCPU}
-elif [ "${CPU}" == "OFF" ] && [ "${GPU}" == "ON" ]
-then
-    sedIt ${stellaOpt} ${dycoreOpt} ${gpuVar} ${optGPU}
+    proj="CRCLIM"
 else
-    errConfig  
-    exit 1
+    proj="CORDEX"
 fi
+
+if [ "${CPU}" == "ON" ]
+then
+    targ="CPU"
+else
+    targ="GPU"
+fi
+
+sedIt ${proj} ${targ}
 
 if [ "${CPU}" == "ON" ]
 then
