@@ -167,6 +167,7 @@ installPompa()
     test/jenkins/build.sh -c cray -t ${TARGET,,} -x ${EBROOTDYCORE_CRCLIM_GPU} -i ${instPath}
 }
 
+showConfig
 getPompa "crclim" "C2SM-RCM"
 exportLoad
 installPompa ${INSTPATH}
