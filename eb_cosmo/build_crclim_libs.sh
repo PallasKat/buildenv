@@ -309,7 +309,7 @@ sedIt ${proj} ${targ}
 
 if [ "${CPU}" == "ON" ]
 then
-cat <<EOT >> ${INSTPATH}/export_load_cpu.txt
+cat <<EOT > ${INSTPATH}/export_load_cpu.txt
 export EASYBUILD_PREFIX=${INSTPATH}
 export EASYBUILD_BUILDPATH=/tmp/${USER}/easybuild
 module load daint-gpu
@@ -319,7 +319,7 @@ fi
 
 if [ "${GPU}" == "ON" ]
 then
-cat <<EOT >> ${INSTPATH}/export_load_gpu.txt
+cat <<EOT > ${INSTPATH}/export_load_gpu.txt
 export EASYBUILD_PREFIX=${INSTPATH}
 export EASYBUILD_BUILDPATH=/tmp/${USER}/easybuild
 module load daint-gpu
