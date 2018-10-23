@@ -164,7 +164,23 @@ installPompa()
     cp ${EASYBUILD_PREFIX}/Option.lib.${TARGET,,} ./
     contOrExit "Copy new Option.lib.${TARGET,,}"  $?
 
-    test/jenkins/build.sh -c cray -t ${TARGET,,} -x ${EBROOTDYCORE_CRCLIM_GPU} -i ${instPath}
+    if [ "${CRCLIM}" == "ON" ] && [ "${CPU}" == "ON" ]
+    then
+        test/jenkins/build.sh -c cray -t ${TARGET,,} -x ${EBROOTDYCORE_CRCLIM_CPU} -i ${instPath}
+    elif [ "${CRCLIM}" == "ON" ] && [ "${CPU}" == "OFF" ]
+    then
+        test/jenkins/build.sh -c cray -t ${TARGET,,} -x ${EBROOTDYCORE_CRCLIM_GPU} -i ${instPath}
+    elif  [ "${CRCLIM}" == "OFF" ] && [ "${CPU}" == "ON" ]
+    then
+        test/jenkins/build.sh -c cray -t ${TARGET,,} -x ${EBROOTDYCORE_CORDEX_CPU} -i ${instPath}    
+    elif  [ "${CRCLIM}" == "OFF" ] && [ "${CPU}" == "OFF" ]
+    then
+        test/jenkins/build.sh -c cray -t ${TARGET,,} -x ${EBROOTDYCORE_CORDEX_GPU} -i ${instPath}
+    else
+        echo "[ERROR] Trying to build an Invalid configuration"
+        exit 1
+    fi
+    
 }
 
 parseOptions "$@"
