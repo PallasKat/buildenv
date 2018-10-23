@@ -116,7 +116,7 @@ parseOptions()
         echo "[INFO] Creating path:"
         echo "[INFO] ${INSTPATH}"
         mkdir -p ${INSTPATH}
-        contOrExit "Creating Cosmo install path"
+        contOrExit "Creating Cosmo install path" $?
     fi
 }
 
@@ -156,13 +156,13 @@ installPompa()
 
     cd cosmo-pompa/cosmo
     test/jenkins/build.sh -h
-    contOrExit "Trigger machine env fetch"
+    contOrExit "Trigger machine env fetch" $? 
 
     cp ${EASYBUILD_PREFIX}/env.daint.sh test/jenkins/env/
-    contOrExit "Copy new Daint env"
+    contOrExit "Copy new Daint env" $?
 
     cp ${EASYBUILD_PREFIX}/Option.lib.${TARGET,,} ./
-    contOrExit "Copy new Option.lib.${TARGET,,}"
+    contOrExit "Copy new Option.lib.${TARGET,,}"  $?
 
     test/jenkins/build.sh -c cray -t ${TARGET,,} -x ${EBROOTDYCORE_CRCLIM_GPU} -i ${instPath}
 }
