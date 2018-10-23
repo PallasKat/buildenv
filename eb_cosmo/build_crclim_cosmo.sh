@@ -29,7 +29,7 @@ showConfig()
 
 showUsage()
 {
-    echo "Usage: $(basename $0) -p project -t target -i path [-z]"
+    echo "Usage: $(basename $0) -p project -t target -i path"
     echo ""
     echo "Arguments:"
     echo "-h           show this help message and exit"
@@ -47,7 +47,7 @@ parseOptions()
     CPU=""
     INSTPATH=OFF
     
-    while getopts ":p:t:i:hz" opt; do
+    while getopts ":p:t:i:h" opt; do
         case $opt in
         p)
             PROJECT=$OPTARG
@@ -167,6 +167,7 @@ installPompa()
     test/jenkins/build.sh -c cray -t ${TARGET,,} -x ${EBROOTDYCORE_CRCLIM_GPU} -i ${instPath}
 }
 
+parseOptions "$@"
 showConfig
 getPompa "crclim" "C2SM-RCM"
 exportLoad
