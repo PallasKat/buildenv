@@ -283,9 +283,9 @@ sedIt()
     dycoreOpt="EBROOTDYCORE_${proj^^}_${targ^^}"
     optFile="Option.lib.${targ,,}"
 
-    sed -i "s@%STELLADIR%@\"${stellaOpt}\"@g" "${template}" > "${optFile}"
+    sed "s@%STELLADIR%@\"${stellaOpt}\"@g" "${template}" > "${optFile}"
     contOrExit "SED STELLA" $?
-    sed -i "s@%DYCOREDIR%@\"${dycoreOpt}\"@g" "${optFile}" >> "${optFile}"
+    sed -i "s@%DYCOREDIR%@\"${dycoreOpt}\"@g" "${optFile}"
     contOrExit "SED DYCORE" $?
 }
 
