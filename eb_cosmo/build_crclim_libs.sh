@@ -285,7 +285,7 @@ sedIt()
 
     sed -i "s@%STELLADIR%@\"${stellaOpt}\"@g" "${template}" > "${optFile}"
     contOrExit "SED STELLA" $?
-    sed -i "s@%DYCOREDIR%@\"${dycoreOpt}\"@g" "${op}" >> "${optFile}"
+    sed -i "s@%DYCOREDIR%@\"${dycoreOpt}\"@g" "${optFile}" >> "${optFile}"
     contOrExit "SED DYCORE" $?
 }
 
