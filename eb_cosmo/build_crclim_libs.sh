@@ -56,8 +56,6 @@ contOrExit()
     fi
 }
 
-
-
 showUsage()
 {
     echo "Usage: $(basename $0) -p project -t target -i path [-z]"
