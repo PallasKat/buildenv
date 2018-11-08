@@ -206,10 +206,10 @@ sedIt()
     stellaOpt="EBROOTSTELLA_${proj}"
     dycoreOpt="EBROOTDYCORE_${proj}_${targ}"
     
-    cudaOpt=""
+    cudaOpt="OFF"
     if [ "${targ}" == "GPU" ]
     then
-        cudaOpt="CUDA"
+        cudaOpt="ON"
     fi
 
     optFile="Options.lib.${targ,,}"

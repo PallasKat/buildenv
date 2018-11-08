@@ -127,7 +127,7 @@ getPompa()
     if [ -d "$cosmoDir" ]
     then
         echo "[ERROR] The workspace has not been wiped. Please delete it manually."
-#        exit 1
+        exit 1
     fi
 
     git clone -b "${br}" --single-branch git@github.com:"${org}"/cosmo-pompa.git
