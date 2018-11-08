@@ -1,0 +1,53 @@
+# Options.lib.gpu
+
+# global libraries and includes
+LIB      = $(LDFLAGS)
+INC      = -I.
+INC     += -I$(ROOT)/$(SRCDIR)
+
+# optimized flags, libraries and includes
+OPTL     =
+OPTI     =
+
+# debugging flags, libraries and includes
+DBGL     =
+DBGI     =
+
+# MPI library
+MPIL     =
+MPII     = -D__MPICH2
+
+# Grib1 library
+GRIBDWDL = -L${EBROOTLIBGRIB1_CRCLIM} -lgrib1_cray
+GRIBDWDI =
+
+# Grib-API library
+# GRIBAPI_VERSION = v1.13.1
+GRIBAPIL = -L${EBROOTGRIB_API}/lib -lgrib_api_f90 -lgrib_api -L${EBROOTJASPER}/lib -ljasper
+GRIBAPII = -I${EBROOTGRIB_API}/include
+
+
+# NetCDF library
+NETCDFL  = 
+NETCDFI  = 
+
+# Synsat library
+RTTOV7L  = -L$(INSTALL_DIR)/librttov7 -lrttov7_$(COMPILER)
+RTTOV7I  =
+RTTOV10L =
+RTTOV10I =
+
+# Serialization library
+SERIALBOX  =
+SERIALBOXL =
+SERIALBOXI =
+
+# STELLA library
+STELLA   = $(STELLA_DIR)
+STELLAL  = -L$(STELLA)/lib -lCommunicationFrameworkCUDA -ljson -lStellaCUDA -lgcl -lStellaUtils -lSharedInfrastructureCUDA -lstdc++
+STELLAI  =
+
+# Dycore library
+DYCORE   = $(DYCORE_DIR)
+DYCOREL  = -L$(DYCORE)/lib -lDycoreWrapperCUDA -lDycoreCUDA
+DYCOREI  =
