@@ -1,0 +1,30 @@
+easyblock = 'CMakeMake'
+
+name = 'DYCORE_%PROJ%_%ARCH%'
+version = '%VER%'
+versionsuffix = '-double%VSUFFIX%'
+
+homepage = 'https://github.com/C2SM-RCM/cosmo-pompa/tree/master/dycore (-b crclim)'
+description = """COSMO Pompa Dynamical core for %ARCH% (%PROJ%)"""
+
+toolchain = {'name': 'CrayGNU', 'version': '18.08'}
+toolchainopts = {'verbose': False}
+
+sources = [ {'filename': 'dycore.tar.gz'}, ]
+
+builddependencies = [ ('CMake', '3.12.0', '', True), ]
+
+dependencies = [
+    ('STELLA_%PROJ%', '%(version)s', '%(versionsuffix)s'),
+]
+
+srcdir = "../dycore"
+configopts  = "-DCMAKE_BUILD_TYPE=Release "
+configopts += "-DSINGLEPRECISION=OFF "
+configopts += "-DCUDA_BACKEND=%CUDA% "
+configopts += "-DSTELLA_DIR=${EBROOTSTELLA_%PROJ%} " 
+configopts += "-DBITREPRO=%BR% "
+
+separate_build_dir = True
+
+moduleclass = 'devel'
